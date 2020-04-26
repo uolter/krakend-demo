@@ -1,0 +1,72 @@
+{
+  "version": 2,
+  "extra_config": {},
+  "timeout": "3000ms",
+  "cache_ttl": "300s",
+  "output_encoding": "negotiate",
+  "name": "test",
+  "port": 8080,
+  "endpoints": [
+    {
+      "endpoint": "/news",
+      "method": "GET",
+      "extra_config": {},
+      "output_encoding": "no-op",
+      "concurrent_calls": 1,
+      "backend": [
+        {
+          "url_pattern": "/",
+          "encoding": "no-op",
+          "sd": "static",
+          "extra_config": {},
+          "method": "GET",
+          "host": [
+            "http://kraken-demo_rest_api_1:8081/"
+          ],
+          "disable_host_sanitize": false
+        }
+      ]
+    },
+    {
+      "endpoint": "/events",
+      "method": "GET",
+      "output_encoding": "json",
+      "concurrent_calls": 1,
+      "backend": [
+        {
+          "url_pattern": "/events",
+          "encoding": "json",
+          "host": [
+            "http://kraken-demo_rest_api_1:8081"
+          ],
+          "disable_host_sanitize": false,
+          "extra_config": {}
+        }
+      ]
+    },
+    {
+      "endpoint": "/event",
+      "method": "POST",
+      "output_encoding": "json",
+      "concurrent_calls": 1,
+      "backend": [
+        {
+          "url_pattern": "/event",
+          "encoding": "json",
+          "host": [
+            "http://kraken-demo_rest_api_1:8081"
+          ],
+          "disable_host_sanitize": false
+        }
+      ],
+      "extra_config": {
+        "github.com/devopsfaith/krakend-jose/validator": {
+          "alg": "RS256",
+          "audience": ["http://kraken-demo_rest_api_1:8081"],
+          "jwk-url": "https://<auth0 domain>/.well-known/jwks.json",
+          "disable_jwk_security": true
+        }
+      }
+    }
+  ]
+}

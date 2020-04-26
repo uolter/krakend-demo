@@ -1,0 +1,17 @@
+version: "3"
+services:
+  rest_api:
+    build:
+      context: ./go-rest-api
+    ports:
+      - "8081:8081"
+  krakend_ce:
+    image: devopsfaith/krakend:1.1.1
+    volumes:
+      - ./krakend:/etc/krakend
+    ports:
+      - "1234:1234"
+      - "8080:8080"
+      - "8090:8090"
+    depends_on:
+      - rest_api
