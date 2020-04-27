@@ -9,7 +9,7 @@ This repository shows how to configure the **Application Gateway** [Krakend.io](
 To run the demo application you need:
 
 1. docker version 18.09.9 or grater
-2. doker compose version 1.23.2 or grater
+2. docker compose version 1.23.2 or grater
 3. an https://auth0.com/ account
 
 ## Run the application
