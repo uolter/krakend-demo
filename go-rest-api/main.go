@@ -52,8 +52,16 @@ func getOneEvent(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Returns all events
 func getAllEvents(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(allevents)
+
+	flatten := r.URL.Query().Get("flatten")
+
+	if flatten != "" && flatten == "true" {
+		json.NewEncoder(w).Encode(allevents.Events)
+	} else {
+		json.NewEncoder(w).Encode(allevents)
+	}
 }
 
 func updateEvent(w http.ResponseWriter, r *http.Request) {

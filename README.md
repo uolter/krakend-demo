@@ -200,3 +200,51 @@ curl --request POST \
   "title": "Golang Meetup"
 }
 ```
+
+## Query string parameter(s) and Respons with collection
+
+When the content in the response does not encapsulate an object (json inside brackets, e.g: { "status":"OK" } but a collection (e.g: [ "a", "b" ]) you can use the attribute **is_collection** within the backend block.
+
+Moreover you can specify with query string parameter(s) to forward to the backend with the **querystring_params** attribute.
+eg:
+
+*krakend.json*
+```
+"endpoint": "/events",
+  "querystring_params": [
+    "flatten"
+  ],
+  "method": "GET",
+  "output_encoding": "json",
+  "concurrent_calls": 1,
+  "backend": [
+    {
+      "url_pattern": "/events",
+      "encoding": "json",
+      "host": [
+        "http://kraken-demo_rest_api_1:8081"
+      ],
+      "disable_host_sanitize": false,
+      "extra_config": {},
+      "is_collection": true,
+      "target": ""
+    }
+  ]
+},
+```
+
+*curl*
+```
+$ curl --request GET \
+  --url 'http://localhost:8080/events?flatten=true'
+
+{
+  "collection": [
+    {
+      "description": "Simple krakend application",
+      "id": "1",
+      "title": "Introduction to Krakend"
+    }
+  ]
+}
+```
