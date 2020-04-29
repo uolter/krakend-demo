@@ -29,6 +29,9 @@
     },
     {
       "endpoint": "/events",
+      "querystring_params": [
+        "flatten"
+      ],
       "method": "GET",
       "output_encoding": "json",
       "concurrent_calls": 1,
@@ -40,7 +43,37 @@
             "http://kraken-demo_rest_api_1:8081"
           ],
           "disable_host_sanitize": false,
-          "extra_config": {}
+          "extra_config": {},
+          "is_collection": true
+        }
+      ]
+    },
+    {
+      "endpoint": "/events/titles",
+      "method": "GET",
+      "output_encoding": "json",
+      "concurrent_calls": 1,
+      "backend": [
+        {
+          "url_pattern": "/events",
+          "encoding": "json",
+          "host": [
+            "http://kraken-demo_rest_api_1:8081"
+          ],
+          "disable_host_sanitize": false,
+          "extra_config": {
+            "github.com/devopsfaith/krakend/proxy": {
+              "flatmap_filter": [
+                {
+                  "type": "del",
+                  "args": [
+                    "events.*.id",
+                    "events.*.description"
+                  ]
+                }
+              ]
+            }
+          }
         }
       ]
     },
@@ -63,7 +96,7 @@
         "github.com/devopsfaith/krakend-jose/validator": {
           "alg": "RS256",
           "audience": ["http://kraken-demo_rest_api_1:8081"],
-          "jwk-url": "https://<auth0 domain>/.well-known/jwks.json",
+          "jwk-url": "https://dev-zf2hwbcb.eu.auth0.com/.well-known/jwks.json",
           "disable_jwk_security": true
         }
       }
